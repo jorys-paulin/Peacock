@@ -1,6 +1,6 @@
 /*
  *     The Peacock Project - a HITMAN server replacement.
- *     Copyright (C) 2021-2025 The Peacock Project Team
+ *     Copyright (C) 2021-2026 The Peacock Project Team
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU Affero General Public License as published by
@@ -76,10 +76,10 @@ export function getPlayerProfileData(
         xpData[parentLocation.Id].Xp += subLocationData?.Xp ?? 0
         xpData[parentLocation.Id].ActionXp += subLocationData?.ActionXp ?? 0
 
-        // Ewww...
+        // This isn't that bad anymore, but we should figure out if HideProgression should be factored in here
         if (
             subLocationKey === "LOCATION_ICA_FACILITY_ARRIVAL" ||
-            subLocationKey.includes("SNUG_")
+            subLocation.Properties.IsHidden
         ) {
             continue
         }

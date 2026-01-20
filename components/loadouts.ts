@@ -1,6 +1,6 @@
 /*
  *     The Peacock Project - a HITMAN server replacement.
- *     Copyright (C) 2021-2025 The Peacock Project Team
+ *     Copyright (C) 2021-2026 The Peacock Project Team
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU Affero General Public License as published by
@@ -201,13 +201,14 @@ export class Loadouts {
                 userProfile.Extensions.defaultloadout?.[sublocation?.Id] ??
                 defaultLoadout
         } else {
-            let dl = loadouts.getLoadoutFor(gameVersion)
+            let gameVersionedLoadout = loadouts.getLoadoutFor(gameVersion)
 
-            if (!dl) {
-                dl = loadouts.createDefault(gameVersion)
+            if (!gameVersionedLoadout) {
+                gameVersionedLoadout = loadouts.createDefault(gameVersion)
             }
 
-            loadout = dl.data[sublocation?.Id] ?? {}
+            loadout =
+                gameVersionedLoadout.data[sublocation?.Id] ?? defaultLoadout
         }
 
         // SILLY HACK FOR OLD (< 8.6.0) SAVES: For LOCATION_NEWZEALAND, if the saved suit is TOKEN_OUTFIT_WET_SUIT, replace

@@ -1,6 +1,6 @@
 /*
  *     The Peacock Project - a HITMAN server replacement.
- *     Copyright (C) 2021-2025 The Peacock Project Team
+ *     Copyright (C) 2021-2026 The Peacock Project Team
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU Affero General Public License as published by
@@ -287,14 +287,14 @@ export function createLocationsData(
     }
 
     for (const sublocationId of allSublocationIds) {
+        const sublocation = locData.children[sublocationId]
+
         if (
-            sublocationId === "LOCATION_TRAPPED_WOLVERINE" ||
-            sublocationId.includes("SNUG")
+            !sublocation.Properties.CreateContractId ||
+            sublocation.Properties.IsHidden
         ) {
             continue
         }
-
-        const sublocation = locData.children[sublocationId]
 
         if (!sublocation.Properties.ParentLocation) {
             assert.fail("sublocation has no parent, that's illegal")
