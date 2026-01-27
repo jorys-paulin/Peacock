@@ -1,6 +1,6 @@
 /*
  *     The Peacock Project - a HITMAN server replacement.
- *     Copyright (C) 2021-2024 The Peacock Project Team
+ *     Copyright (C) 2021-2026 The Peacock Project Team
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU Affero General Public License as published by
@@ -21,8 +21,11 @@ import type { GameVersion, Unlockable, UserProfile } from "./types/types"
 import {
     brokenItems,
     CONCRETEART_UNLOCKABLES,
+    BAIJU_UNLOCKABLES,
+    BELLINI_UNLOCKABLES,
     DELUXE_UNLOCKABLES,
     EXECUTIVE_UNLOCKABLES,
+    FRENCHMARTINI_UNLOCKABLES,
     H1_GOTY_UNLOCKABLES,
     H1_REQUIEM_UNLOCKABLES,
     H2_RACCOON_STINGRAY_UNLOCKABLES,
@@ -51,6 +54,13 @@ import { UnlockableMasteryData } from "./types/mastery"
 import { attainableDefaults, defaultSuits, getDefaultSuitFor } from "./utils"
 import { log, LogLevel } from "./loggingInterop"
 
+export const ISOLATED_UNLOCKABLES_EXEMPT = [
+    "TOKEN_OUTFIT_HERO_BLACKSPECIAL_SUIT", // Black Streak Suit
+    "TOKEN_OUTFIT_HERO_MINININJA_SUIT", // Futo Suit
+    "TOKEN_OUTFIT_HERO_FREEDOMFIGHTERS_SUIT", // Freedom Phantom Suit
+    "TOKEN_OUTFIT_HERO_LYNCH_SUIT", // Lynch Suit
+]
+
 const DELUXE_DATA = [
     ...CONCRETEART_UNLOCKABLES,
     ...DELUXE_UNLOCKABLES,
@@ -72,6 +82,9 @@ const DELUXE_DATA = [
     ...PENICILLIN_UNLOCKABLES,
     ...TOMORROWLAND_UNLOCKABLES,
     ...LAMBIC_UNLOCKABLES,
+    ...FRENCHMARTINI_UNLOCKABLES,
+    ...BAIJU_UNLOCKABLES,
+    ...BELLINI_UNLOCKABLES,
 ]
 
 /**
@@ -127,7 +140,9 @@ function filterUnlockedContent(
 
         // Handles unlockables that belong to a package or unlocked gear from evergreen
         if (packagedUnlocks.has(unlockable.Id)) {
-            packagedUnlocks.get(unlockable.Id) && acc[0].push(unlockable)
+            if (packagedUnlocks.get(unlockable.Id)) {
+                acc[0].push(unlockable)
+            }
         }
 
         // Handles packages
@@ -193,9 +208,12 @@ function filterUnlockedContent(
 
             if (isEvergreen || isDeluxe) {
                 acc[0].push(unlockable)
-            } else {
+            } else if (
+                ISOLATED_UNLOCKABLES_EXEMPT.includes(unlockable.Id) ||
+                getFlag("enableIsolatedUnlockables")
+            ) {
                 /**
-                 *  List of untracked items (to award to user until they are tracked to corresponding challenges)
+                 *  List of untracked items when they are enabled (to award to user until they are tracked to corresponding challenges)
                  */
                 acc[1].push(unlockable)
             }
@@ -429,6 +447,27 @@ function filterAllowedContent(gameVersion: GameVersion, entP: string[]) {
             )
         }
 
+        if (FRENCHMARTINI_UNLOCKABLES.includes(id)) {
+            return (
+                e.includes("256eeeb3d8044aa1840e1606d268e0b2") ||
+                e.includes("3711140")
+            )
+        }
+
+        if (BAIJU_UNLOCKABLES.includes(id)) {
+            return (
+                e.includes("04cb1b3e5b424308be25236f6bc1b2fb") ||
+                e.includes("3957470")
+            )
+        }
+
+        if (BELLINI_UNLOCKABLES.includes(id)) {
+            return (
+                e.includes("0047ddcd5e6846e881f1037c1416e3d9") ||
+                e.includes("4097630")
+            )
+        }
+
         return true
     }
 }
@@ -508,7 +547,8 @@ export function getUnlockablesById(
  * @param profileId The profileId of the player
  * @param gameVersion The game version
  * @param inv The inventory to update
- * @param sublocation The sublocation to check for a default suit
+ * @param sublocation The sublocation to check for a default suit.
+ * @param suitOverride A default suit override for this contract.
  * @returns The updated inventory
  */
 function updateWithDefaultSuit(
@@ -516,6 +556,7 @@ function updateWithDefaultSuit(
     gameVersion: GameVersion,
     inv: InventoryItem[],
     sublocation?: Unlockable,
+    suitOverride?: string | undefined,
 ): InventoryItem[] {
     if (!sublocation) {
         return inv
@@ -523,7 +564,7 @@ function updateWithDefaultSuit(
 
     // Yes this is slow. We should organize the unlockables into a { [Id: string]: Unlockable } map.
     const locationSuit = getUnlockableById(
-        getDefaultSuitFor(sublocation),
+        getDefaultSuitFor(sublocation, gameVersion, suitOverride),
         gameVersion,
     )
 
@@ -553,12 +594,14 @@ function updateWithDefaultSuit(
  * @param profileId  The profile ID of the player
  * @param gameVersion  The game version
  * @param sublocation  The sublocation to generate the inventory for. Used to award default suits for the sublocation. Defaulted to undefined.
+ * @param suitOverride A default suit override for this contract. Defaulted to undefined.
  * @returns The player's inventory
  */
 export function createInventory(
     profileId: string,
     gameVersion: GameVersion,
     sublocation: Unlockable | undefined = undefined,
+    suitOverride?: string | undefined,
 ): InventoryItem[] {
     if (inventoryUserCache.has(profileId)) {
         return updateWithDefaultSuit(
@@ -566,6 +609,7 @@ export function createInventory(
             gameVersion,
             inventoryUserCache.get(profileId)!,
             sublocation,
+            suitOverride,
         )
     }
 
@@ -581,7 +625,11 @@ export function createInventory(
         ),
         ...getConfig<Unlockable[]>("SniperUnlockables", true),
         ...getConfig<Unlockable[]>("VersusUnlockables", true),
-    ].filter((u) => u.Type !== "location") // locations not in inventory
+    ].filter(
+        (u) =>
+            u.Properties && // remove broken unlockables with no properties
+            u.Type !== "location", // locations do not go in inventory
+    )
 
     let unlockables: Unlockable[] = allunlockables
 

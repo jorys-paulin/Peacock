@@ -1,6 +1,6 @@
 /*
  *     The Peacock Project - a HITMAN server replacement.
- *     Copyright (C) 2021-2024 The Peacock Project Team
+ *     Copyright (C) 2021-2026 The Peacock Project Team
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU Affero General Public License as published by
@@ -542,6 +542,7 @@ export const missionsInLocation = {
                 "5680108a-19dc-4448-9344-3d0290217162",
             ],
             LOCATION_EDGY_FOX: [
+                "5bc6a2a3-d80a-4cb3-9ebc-a93d9238950d",
                 "ccdc7043-62af-44e8-a5fc-38b008c2044e",
                 "9d88605f-6871-46a8-bd46-9804ea04fca9",
                 "12d83cb0-a2d6-4c01-b9d8-675ac635ee61",
@@ -578,15 +579,18 @@ export const missionsInLocation = {
                 "7569d5e4-5270-4b69-96c8-e47b99876390",
                 "479ec396-b96f-4e01-94d9-aedaa0582ed9",
                 "09ea9b32-dc85-4633-9f6a-c5c4bfded5ac",
+                "80582fdb-c77e-4d6a-b33f-1f14f34b72c4",
             ],
             LOCATION_COASTALTOWN: [
                 "8db8fa33-cb41-4a0d-a2de-e30d884afb95",
                 "9e469023-e0c4-42bf-8527-f9fcaf624421",
             ],
+            LOCATION_BANGKOK: ["3fa83d8d-eb75-4973-926a-6052ee5b2aa4"],
             LOCATION_COLORADO: [
                 "ff5b4e53-49ea-4d85-b94e-d3c8b3fc7ab3",
                 "b4d555eb-e2c9-40c2-b155-328a7019fd28",
             ],
+            LOCATION_HOKKAIDO: ["6678cf8a-f614-4536-9584-e649351f40c2"],
             LOCATION_NEWZEALAND: ["39cc0603-4348-4dbf-9bd3-733cadf2913c"],
             LOCATION_MIAMI: ["de9788cc-b9c4-47fc-b5df-86451cd82c43"],
             LOCATION_COLOMBIA: ["90121ee0-0431-4a97-9bc8-8a7e2ca30d65"],

@@ -371,7 +371,37 @@
         "IsHidden": null,
         "TileImage": "images/ContractConditions/Condition_Killmethod_Shotgun.jpg",
         "Resource": [],
-        "Objectives": [],
+        "Objectives": [
+            {
+                "_comment": "----- Silent objective to mark GameChanger as primary -----",
+                "Id": "b956c509-5d79-4c7a-80ef-b0800ad850f9",
+                "Type": "statemachine",
+                "Category": "primary",
+                "ExcludeFromScoring": true,
+                "OnActive": {
+                    "IfInProgress": {
+                        "Visible": false
+                    },
+                    "IfCompleted": {
+                        "Visible": false
+                    },
+                    "IfFailed": {
+                        "Visible": false
+                    }
+                },
+                "Definition": {
+                    "Scope": "session",
+                    "Context": {},
+                    "States": {
+                        "Start": {
+                            "-": {
+                                "Transition": "Success"
+                            }
+                        }
+                    }
+                }
+            }
+        ],
         "ShowBasedOnObjectives": null,
         "IsPrestigeObjective": null
     },
@@ -5123,6 +5153,49 @@
         "ShowBasedOnObjectives": null,
         "IsPrestigeObjective": null
     },
+    "7de74fc2-5b8c-4b5f-a151-4f14db638908": {
+        "Name": "UI_CONTRACT_BAIJU_GAMECHANGER_CLEAN_HANDS_NAME",
+        "Description": "UI_CONTRACT_BAIJU_GAMECHANGER_CLEAN_HANDS_DESC",
+        "Icon": "images/challenges/default_challenge_icon.png",
+        "IsHidden": null,
+        "TileImage": "images/contracts/gamechangers/Gamechanger_Global_CleanHands.jpg",
+        "Resource": [
+            "assembly:/_PRO/scenes/missions/Bangkok/baiju_clean_hands.brick"
+        ],
+        "Objectives": [
+            {
+                "_comment": "----- [OPTIONAL] Clean Hands - Baiju Variant // Requires all kills to have a context of NOT_HERO -----",
+                "Id": "82603825-3f08-4708-80aa-ca9c78e3509b",
+                "BriefingText": "$loc UI_CONTRACT_BAIJU_GAMECHANGER_CLEAN_HANDS_OBJ",
+                "HUDTemplate": {
+                    "display": "$loc UI_CONTRACT_BAIJU_GAMECHANGER_CLEAN_HANDS_OBJ",
+                    "iconType": 9
+                },
+                "Category": "secondary",
+                "Type": "statemachine",
+                "Definition": {
+                    "Scope": "session",
+                    "States": {
+                        "Start": {
+                            "Kill": {
+                                "Condition": {
+                                    "$not": {
+                                        "$eq": ["$Value.KillContext", 1]
+                                    }
+                                },
+                                "Transition": "Failure"
+                            },
+                            "exit_gate": {
+                                "Transition": "Success"
+                            }
+                        }
+                    }
+                }
+            }
+        ],
+        "ShowBasedOnObjectives": null,
+        "IsPrestigeObjective": null
+    },
     "aec224db-e0ea-4718-bf27-f9fd26aa3ab5": {
         "Name": "UI_GAMECHANGERS_COLORADO_LAPTOP_FARMHOUSE_NAME",
         "Description": "UI_GAMECHANGERS_COLORADO_LAPTOP_ROSE_OFFICE_DESC",
@@ -8924,6 +8997,250 @@
                                 },
                                 "Transition": "Failure"
                             }
+                        }
+                    }
+                }
+            }
+        ],
+        "ShowBasedOnObjectives": null,
+        "IsPrestigeObjective": null
+    },
+    "f42433c0-9574-49fa-bfb4-ddb9e55b1474": {
+        "Name": "UI_CONTRACT_EVERGREEN_MISSION_PAYOUT_OBJ",
+        "Description": "UI_CONTRACT_EVERGREEN_MISSION_PAYOUT_OBJ",
+        "Icon": "images/challenges/default_challenge_icon.png",
+        "IsHidden": true,
+        "TileImage": "images/test/placeholder.jpg",
+        "Resource": [],
+        "Objectives": [
+            {
+                "Id": "6f7e63bc-ac2b-43e4-bc42-4e07e680ae8b",
+                "Category": "secondary",
+                "ExcludeFromScoring": true,
+                "HideInMenu": true,
+                "BriefingText": "$loc UI_CONTRACT_FRENCHMARTINI_OBJ_CURRENCY",
+                "HUDTemplate": {
+                    "display": "$loc UI_CONTRACT_FRENCHMARTINI_OBJ_CURRENCY",
+                    "iconType": 9
+                },
+                "ObjectiveType": "custom",
+                "Type": "statemachine",
+                "OnActive": {
+                    "IfCompleted": {
+                        "Visible": false
+                    }
+                },
+                "Definition": {
+                    "Context": {
+                        "Balance": 0,
+                        "Other": ""
+                    },
+                    "ContextListeners": {
+                        "Balance": {
+                            "type": "custom",
+                            "HUDTemplate": {
+                                "iconType": 9,
+                                "display": {
+                                    "$loc": {
+                                        "key": "UI_CONTRACT_FRENCHMARTINI_OBJ_CURRENCY",
+                                        "data": [
+                                            "$formatint $.Balance",
+                                            "$.Other"
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "States": {
+                        "Start": {
+                            "-": {
+                                "Transition": "Success"
+                            }
+                        },
+                        "Success": {
+                            "SetBalance": {
+                                "Condition": {
+                                    "$gt": ["$Value.Chips", 0]
+                                },
+                                "Actions": {
+                                    "$set": ["Balance", "$Value.Chips"]
+                                },
+                                "Transition": "Active"
+                            }
+                        },
+                        "Active": {
+                            "SetBalance": [
+                                {
+                                    "Actions": {
+                                        "$set": ["Balance", "$Value.Chips"]
+                                    }
+                                },
+                                {
+                                    "Condition": {
+                                        "$eq": ["$.Balance", 0]
+                                    },
+                                    "Transition": "Success"
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        ],
+        "ShowBasedOnObjectives": null,
+        "IsPrestigeObjective": null
+    },
+    "1099c1f6-11d0-4a0d-99b8-b9cb1e411b5f": {
+        "Name": "UI_GAMECHANGERS_GLOBAL_HIDDEN_TARGETS_NAME",
+        "Description": "UI_GAMECHANGERS_GLOBAL_HIDDEN_TARGETS_DESC",
+        "Icon": "images/challenges/default_challenge_icon.png",
+        "IsHidden": null,
+        "TileImage": "images/Contracts/Gamechangers/Gamechanger_Global_HiddenTargets.jpg",
+        "Resource": [],
+        "Objectives": [
+            {
+                "_comment": "----- Silent objective to mark GameChanger as primary -----",
+                "Id": "20293ef0-2836-4b38-8774-e6e1452e8c7e",
+                "Type": "statemachine",
+                "Category": "primary",
+                "ExcludeFromScoring": true,
+                "AllowEtRestartOnSuccess": true,
+                "OnActive": {
+                    "IfInProgress": {
+                        "Visible": false
+                    },
+                    "IfCompleted": {
+                        "Visible": false
+                    },
+                    "IfFailed": {
+                        "Visible": false
+                    }
+                },
+                "Definition": {
+                    "Scope": "session",
+                    "Context": {},
+                    "States": {
+                        "Start": {
+                            "-": {
+                                "Transition": "Success"
+                            }
+                        }
+                    }
+                }
+            }
+        ],
+        "ShowBasedOnObjectives": null,
+        "IsPrestigeObjective": null
+    },
+    "e0aaed74-30d2-441c-895e-09f855379b9d": {
+        "Name": "UI_GAMECHANGERS_TAMARILLO_TRAVERSEALLMIRRORS_NAME",
+        "Description": "UI_GAMECHANGERS_TAMARILLO_TRAVERSEALLMIRRORS_DESC",
+        "Icon": "images/challenges/default_challenge_icon.png",
+        "IsHidden": null,
+        "TileImage": "images/Contracts/Elusive/S3_Bellini/Intel_Photo_B.jpg",
+        "Resource": [],
+        "Objectives": [
+            {
+                "_comment": "----- Traverse all Mirror Portals except those within the Mirror Maze -----",
+                "Id": "4d29f1ea-be34-4613-9db5-2a66b9b550ee",
+                "Category": "secondary",
+                "CounterVisibleInTile": false,
+                "HUDTemplate": {
+                    "display": "$loc UI_GAMECHANGERS_TAMARILLO_TRAVERSEALLMIRRORS_OBJ"
+                },
+                "AllowEtRestartOnSuccess": true,
+                "Type": "statemachine",
+                "Scope": "hit",
+                "Definition": {
+                    "Constants": {
+                        "ValidMirrors": [
+                            "MomsToilets",
+                            "LobbyToilets",
+                            "UnderHelipad",
+                            "TherapyToilets",
+                            "Morgue",
+                            "BroadcastingRoom",
+                            "MaintenanceRoom",
+                            "Staircase"
+                        ]
+                    },
+                    "ContextListeners": {
+                        "MirrorsRemaining": {
+                            "type": "objective-counter",
+                            "header": "UI_GAMECHANGERS_TAMARILLO_TRAVERSEALLMIRRORS_COUNTER",
+                            "deactivate": 0
+                        },
+                        "ForceUpdateCounters": {
+                            "type": "force-update",
+                            "target": "MirrorsRemaining"
+                        }
+                    },
+                    "Scope": "session",
+                    "Context": {
+                        "MirrorsRemaining": 8,
+                        "MirrorsUsed": [],
+                        "ForceUpdateCounters": 0
+                    },
+                    "States": {
+                        "Start": {
+                            "-": {
+                                "Condition": {
+                                    "$eq": ["$.ForceUpdateCounters", 0]
+                                },
+                                "Actions": {
+                                    "$inc": "ForceUpdateCounters"
+                                }
+                            },
+                            "MirrorTraversed": [
+                                {
+                                    "Condition": {
+                                        "$and": [
+                                            {
+                                                "$any": {
+                                                    "?": {
+                                                        "$eq": ["$.#", "$Value"]
+                                                    },
+                                                    "in": "$.ValidMirrors"
+                                                }
+                                            },
+                                            {
+                                                "$not": {
+                                                    "$any": {
+                                                        "?": {
+                                                            "$eq": [
+                                                                "$.#",
+                                                                "$Value"
+                                                            ]
+                                                        },
+                                                        "in": "$.MirrorsUsed"
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    "Actions": {
+                                        "$dec": "MirrorsRemaining",
+                                        "$pushunique": ["MirrorsUsed", "$Value"]
+                                    }
+                                },
+                                {
+                                    "Transition": "Check"
+                                }
+                            ]
+                        },
+                        "Check": {
+                            "-": [
+                                {
+                                    "Condition": {
+                                        "$eq": ["$.MirrorsRemaining", 0]
+                                    },
+                                    "Transition": "Success"
+                                },
+                                {
+                                    "Transition": "Start"
+                                }
+                            ]
                         }
                     }
                 }

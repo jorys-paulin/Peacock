@@ -1,6 +1,6 @@
 /*
  *     The Peacock Project - a HITMAN server replacement.
- *     Copyright (C) 2021-2024 The Peacock Project Team
+ *     Copyright (C) 2021-2026 The Peacock Project Team
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU Affero General Public License as published by
@@ -126,8 +126,9 @@ export interface RequestWithJwt<
     // TODO: Make this `unknown` instead, requires lots of changes elsewhere
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     RequestBody = any,
+    Params = core.ParamsDictionary,
 > extends Request<
-        core.ParamsDictionary,
+        Params,
         // eslint-disable-next-line
         any,
         RequestBody,
@@ -538,11 +539,8 @@ export type UserProfile = {
             }
         }
         defaultloadout?: {
-            [location: string]: {
-                "2"?: string
-                "3"?: string
-                "4"?: string
-                "5"?: string
+            [location: string]: GameLoadout & {
+                [briefcaseId: string]: string
             }
         }
         entP: string[]
@@ -638,6 +636,7 @@ export type Unlockable = {
         DlcImage?: string
         DlcName?: string
         IsLocked?: boolean
+        IsHidden?: boolean
         Order?: number
         ProgressionKey?: string
         Season?: number
@@ -950,6 +949,8 @@ export interface MissionManifestMetadata {
     ServerVersion?: string | null
     NonTargetKillsAllowed?: boolean | null
     Difficulty?: "pro1" | string | null
+    OnlyNeoVR?: boolean | null
+    LocationSuitOverride?: string
     CharacterSetup?:
         | {
               Mode: "singleplayer" | "multiplayer" | string
@@ -1447,11 +1448,31 @@ export type Loadout = {
     id: string
     name: string
     data: {
-        [locationName: string]: {
-            readonly 2?: string
-            readonly 3?: string
-            readonly 4?: string
-        } & { [briefcaseId: string]: string }
+        [locationName: string]: GameLoadout & {
+            [briefcaseId: string]: string
+        }
+    }
+}
+
+/**
+ * A "final" loadout (that is, close to one the game uses).
+ * Keep the indices in line with StashpointSlotName
+ */
+export type GameLoadout = {
+    0?: string
+    1?: string
+    2?: string
+    3?: string
+    4?: string
+    5?: string
+    6?: string
+}
+
+export type LocationLoadout = {
+    loadout: GameLoadout
+    briefcase?: {
+        id: string
+        unlockableId: string
     }
 }
 

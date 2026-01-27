@@ -1,6 +1,6 @@
 /*
  *     The Peacock Project - a HITMAN server replacement.
- *     Copyright (C) 2021-2024 The Peacock Project Team
+ *     Copyright (C) 2021-2026 The Peacock Project Team
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU Affero General Public License as published by
@@ -305,6 +305,27 @@ export const LAMBIC_UNLOCKABLES = [
     "PROP_MELEE_VHS_LAMBIC",
 ]
 
+export const FRENCHMARTINI_UNLOCKABLES = [
+    "TOKEN_OUTFIT_FRENCHMARTINI_POKER_REWARD",
+    "TOKEN_PROP_MELEE_FIBERWIRE_ROPE",
+    "TOKEN_PROP_TOOL_COIN_POKERCHIP_FRENCHMARTINI",
+    "FIREARMS_HERO_PISTOL_HWK_99_FRENCHMARTINI",
+]
+
+export const BAIJU_UNLOCKABLES = [
+    "TOKEN_OUTFIT_REWARD_HERO_YELLOW_TRACKSUIT",
+    "TOKEN_PROP_MELEE_KALI_STICKS",
+    "TOKEN_PROP_MELEE_JADE_DAGGER",
+    "TOKEN_PROP_MELEE_SCISSORS_BAIJU",
+]
+
+export const BELLINI_UNLOCKABLES = [
+    "TOKEN_OUTFIT_REWARD_HERO_BELLINI_EMINEM",
+    "FIREARMS_HERO_PISTOL_BELLINI_A",
+    "TOKEN_PROP_MELEE_JAR_BELLINI_A",
+    "PROP_DEVICE_BELLINI_FIGURE_REMOTE_EXPLOSIVE",
+]
+
 export const brokenItems = [
     // duped dart gun (thanks IOI)
     "835ad050-6d19-4e94-80b1-f5cec9815ba3",
@@ -316,6 +337,7 @@ export const brokenItems = [
     "099afc37-609b-48c9-9278-d3389b45829b",
     // Remove TOKEN_OUTFIT_NEWZEALAND_HERO_NEWZEALANDSUIT, which is the New Zealand default suit.
     // Duplicate of TOKEN_OUTFIT_WET_SUIT, which is an unlock of The Mills Reverie challenge.
+    // It will still be added to the user's inventory as New Zealand's default suit (filtered out here for when getDefaultSuits is enabled).
     "3a4bcbbf-d451-4853-8a85-649120e384df",
     // Remove TOKEN_OUTFIT_COLORADO_HERO_RABIESSUIT
     // Duplicate of TOKEN_OUTFIT_COLORADO_HERO_COLORADOSUIT.

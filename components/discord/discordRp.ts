@@ -1,6 +1,6 @@
 /*
  *     The Peacock Project - a HITMAN server replacement.
- *     Copyright (C) 2021-2024 The Peacock Project Team
+ *     Copyright (C) 2021-2026 The Peacock Project Team
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU Affero General Public License as published by
@@ -168,6 +168,8 @@ export function scenePathToRpAsset(
             return ["elusivetequilasunrise", "The Forger", "Paris"]
         case "assembly:/_pro/scenes/missions/paris/_scene_whiterussian_01.entity":
             return ["elusivewhiterussian", "The Identity Thief", "Paris"]
+        case "assembly:/_pro/scenes/missions/paris/_scene_frenchmartini.entity":
+            return ["elusivefrenchmartini", "The Banker", "Paris"]
 
         // sapienza
         case "assembly:/_pro/scenes/missions/coastaltown/_scene_copperhead.entity":
@@ -197,6 +199,8 @@ export function scenePathToRpAsset(
             return ["bangkokclub27", "Club 27", "Bangkok"]
         case "assembly:/_pro/scenes/missions/bangkok/scene_zika.entity":
             return ["bangkokpzsource", "The Source", "Bangkok"]
+        case "assembly:/_pro/scenes/missions/bangkok/scene_baiju.entity":
+            return ["elusivebaiju", "The Infiltrator", "Bangkok"]
 
         // colorado missions
         case "assembly:/_pro/scenes/missions/colorado_2/_scene_bull.entity":
@@ -218,6 +222,8 @@ export function scenePathToRpAsset(
             ]
         case "assembly:/_pro/scenes/missions/hokkaido/_scene_flu.entity":
             return ["hokkaidopz", "Patient Zero", "Hokkaido"]
+        case "assembly:/_pro/scenes/missions/hokkaido/scene_bellini.entity":
+            return ["elusivebellini", "The Reflection", "Hokkaido"]
 
         // dartmoor
         case "assembly:/_pro/scenes/missions/ancestral/scene_bulldog.entity":
@@ -302,6 +308,8 @@ export function scenePathToRpAsset(
             return ["elusiveredsnapper", "The Rage", "Chongqing"]
         case "assembly:/_pro/scenes/missions/wet/scene_wet_azalea.entity":
             return ["azalea", "The Gluttony Gobble", "Chongqing"]
+        case "assembly:/_pro/scenes/missions/wet/scene_wet_lambic.entity":
+            return ["elusivelambic", "The Splitter", "Chongqing"]
 
         // training
         case "assembly:/_pro/scenes/missions/thefacility/_scene_polarbear_005.entity":
@@ -311,6 +319,7 @@ export function scenePathToRpAsset(
         case "assembly:/_pro/scenes/missions/thefacility/_scene_mission_polarbear_module_002.entity":
         case "assembly:/_pro/scenes/missions/thefacility/_scene_mission_polarbear_module_002_b.entity":
         case "assembly:/_pro/scenes/missions/thefacility/_scene_mission_polarbear_module_005.entity":
+        case "assembly:/_pro/scenes/missions/thefacility/_scene_mission_polarbear_module_005_vr_tutorial.entity":
             return ["icafacilityfinaltest", "ICA Facility", "Greenland"]
 
         // new york

@@ -1,6 +1,6 @@
 /*
  *     The Peacock Project - a HITMAN server replacement.
- *     Copyright (C) 2021-2024 The Peacock Project Team
+ *     Copyright (C) 2021-2026 The Peacock Project Team
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU Affero General Public License as published by
@@ -33,6 +33,24 @@ export const axiosClient = axios.create({
 export const fetcher: SWRConfiguration = {
     fetcher: (url: string, method: AxiosMethod = "get") =>
         axios[method](url).then((res) => res.data),
+}
+
+export const debounce = <T extends unknown[]>(
+    callback: (...args: T) => void,
+    delay = 0,
+): ((...args: T) => void) => {
+    let timeoutTimer: number | null = null
+
+    return (...args: T) => {
+        if (timeoutTimer !== null) {
+            window.clearTimeout(timeoutTimer)
+        }
+
+        timeoutTimer = window.setTimeout(() => {
+            callback(...args)
+            timeoutTimer = null
+        }, delay)
+    }
 }
 
 /**

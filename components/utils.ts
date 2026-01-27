@@ -1,6 +1,6 @@
 /*
  *     The Peacock Project - a HITMAN server replacement.
- *     Copyright (C) 2021-2024 The Peacock Project Team
+ *     Copyright (C) 2021-2026 The Peacock Project Team
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU Affero General Public License as published by
@@ -35,6 +35,8 @@ import { writeFileSync } from "fs"
 import { getFlag } from "./flags"
 import { getConfig, getVersionedConfig } from "./configSwizzleManager"
 import { compare } from "semver"
+import assert from "assert"
+import { getUnlockableById } from "./inventory"
 
 /**
  * True if the server is being run by the launcher, false otherwise.
@@ -43,7 +45,7 @@ export const IS_LAUNCHER = process.env.IS_PEACOCK_LAUNCHER === "true"
 
 export const ServerVer: ServerVersion = {
     _Major: 8,
-    _Minor: 15,
+    _Minor: 22,
     _Build: 0,
     _Revision: 0,
 }
@@ -162,19 +164,22 @@ export function getMaxProfileLevel(gameVersion: GameVersion): number {
 }
 
 /**
- * Calculates the level for the given XP based on XP_PER_LEVEL.
+ * Calculates the level for the given XP based on xpPerLevel (defaults to XP_PER_LEVEL).
  * Minimum level returned is 1.
  */
-export function levelForXp(xp: number): number {
-    return Math.max(1, Math.floor(xp / XP_PER_LEVEL) + 1)
+export function levelForXp(xp: number, xpPerLevel = XP_PER_LEVEL): number {
+    return Math.max(1, Math.floor(xp / xpPerLevel) + 1)
 }
 
 /**
- * Calculates the required XP for the given level based on XP_PER_LEVEL.
+ * Calculates the required XP for the given level based on xpPerLevel (defaults to XP_PER_LEVEL).
  * Minimum XP returned is 0.
  */
-export function xpRequiredForLevel(level: number): number {
-    return Math.max(0, (level - 1) * XP_PER_LEVEL)
+export function xpRequiredForLevel(
+    level: number,
+    xpPerLevel = XP_PER_LEVEL,
+): number {
+    return Math.max(0, (level - 1) * xpPerLevel)
 }
 
 export const EVERGREEN_LEVEL_INFO: number[] = [
@@ -521,7 +526,7 @@ export const defaultSuits = {
     LOCATION_PARENT_BANGKOK: "TOKEN_OUTFIT_BANGKOK_HERO_BANGKOKSUIT",
     LOCATION_PARENT_COLORADO: "TOKEN_OUTFIT_COLORADO_HERO_COLORADOSUIT",
     LOCATION_PARENT_HOKKAIDO: "TOKEN_OUTFIT_HOKKAIDO_HERO_HOKKAIDOSUIT",
-    LOCATION_PARENT_NEWZEALAND: "TOKEN_OUTFIT_WET_SUIT",
+    LOCATION_PARENT_NEWZEALAND: "TOKEN_OUTFIT_NEWZEALAND_HERO_NEWZEALANDSUIT",
     LOCATION_PARENT_MIAMI: "TOKEN_OUTFIT_MIAMI_HERO_MIAMISUIT",
     LOCATION_PARENT_COLOMBIA: "TOKEN_OUTFIT_COLOMBIA_HERO_COLOMBIASUIT",
     LOCATION_PARENT_MUMBAI: "TOKEN_OUTFIT_MUMBAI_HERO_MUMBAISUIT",
@@ -546,24 +551,22 @@ export const defaultSuits = {
  *
  * NOTE: Currently this is hardcoded. To allow for flexibility and extensibility, this should be generated in real-time
  * using the Drops of challenges and masteries. However, that would require looping through all challenges and masteries
- * for all default suits, which is slow. This is a trade-off.
+ * for all default suits, which is slow. This is a trade-off (but also allows plugins to alter it if they really want to).
  *
  * @param gameVersion The game version.
  * @returns The default suits that are attainable via challenges or mastery.
  */
 export function attainableDefaults(gameVersion: GameVersion): string[] {
-    if (gameVersion === "h1") {
-        return []
-    } else if (gameVersion === "h2") {
-        return ["TOKEN_OUTFIT_WET_SUIT"]
-    } else {
-        return [
-            "TOKEN_OUTFIT_GREENLAND_HERO_TRAININGSUIT",
-            "TOKEN_OUTFIT_HOKKAIDO_HERO_HOKKAIDOSUIT",
-            "TOKEN_OUTFIT_WET_SUIT",
-            "TOKEN_OUTFIT_OPULENT_HERO_OPULENTSUIT",
-            "TOKEN_OUTFIT_HERO_DUGONG_SUIT",
-        ]
+    switch (gameVersion) {
+        case "h3":
+            return [
+                "TOKEN_OUTFIT_GREENLAND_HERO_TRAININGSUIT",
+                "TOKEN_OUTFIT_HOKKAIDO_HERO_HOKKAIDOSUIT",
+                "TOKEN_OUTFIT_OPULENT_HERO_OPULENTSUIT",
+                "TOKEN_OUTFIT_HERO_DUGONG_SUIT",
+            ]
+        default:
+            return []
     }
 }
 
@@ -572,20 +575,28 @@ export function attainableDefaults(gameVersion: GameVersion): string[] {
  * Priority is given to the sub-location, then the parent location, then 47's signature suit.
  *
  * @param subLocation The sub-location.
+ * @param gameVersion The game version.
+ * @param suitOverride A default suit override for this contract.
  * @returns The default suit for the given sub-location and parent location.
  */
-export function getDefaultSuitFor(subLocation: Unlockable): string {
+export function getDefaultSuitFor(
+    subLocation: Unlockable,
+    gameVersion: GameVersion,
+    suitOverride?: string | undefined,
+): string {
     type Cast = keyof typeof defaultSuits
-    return (
-        defaultSuits[subLocation.Id as Cast] ||
-        defaultSuits[subLocation.Properties.ParentLocation as Cast] ||
-        "TOKEN_OUTFIT_HITMANSUIT"
-    )
+    return suitOverride && getUnlockableById(suitOverride, gameVersion)
+        ? suitOverride
+        : defaultSuits[subLocation.Id as Cast] ||
+              defaultSuits[subLocation.Properties.ParentLocation as Cast] ||
+              "TOKEN_OUTFIT_HITMANSUIT"
 }
 
 export const nilUuid = "00000000-0000-0000-0000-000000000000"
 
 export const hitmapsUrl = "https://backend.rdil.rocks/partners/hitmaps/contract"
+
+export const vrTutorialId = "47fdffe9-c453-45ad-ad96-ac6f63494c40"
 
 export function isObjectiveActive(
     objective: MissionManifestObjective,
@@ -797,4 +808,55 @@ export function isTrueForEveryElement<Type>(
     }
 
     return true
+}
+
+const SERVER_VERSION_REGEX = /^(?<major>\d+)_(?<minor>\d+)_(?<build>\d+)$/
+const RESOURCES_VERSION_REGEX = /^(?<major>\d+)_(?<minor>\d+)$/
+
+export function extractServerVersion(
+    serverVersion: string | undefined,
+): ServerVersion | undefined {
+    if (!serverVersion) return
+
+    const versionParts = SERVER_VERSION_REGEX.exec(serverVersion)
+
+    if (versionParts?.groups) {
+        return {
+            _Major: parseInt(versionParts.groups.major, 10),
+            _Minor: parseInt(versionParts.groups.minor, 10),
+            _Build: parseInt(versionParts.groups.build, 10),
+            _Revision: 0,
+        }
+    }
+}
+
+// TODO: use me for validation on resources!!
+export function extractResourcesVersion(
+    resourcesServerVersion: string | undefined,
+): ServerVersion | undefined {
+    if (!resourcesServerVersion) return
+
+    const versionParts = RESOURCES_VERSION_REGEX.exec(resourcesServerVersion)
+
+    if (versionParts?.groups) {
+        return {
+            _Major: parseInt(versionParts.groups.major, 10),
+            _Minor: parseInt(versionParts.groups.minor, 10),
+            _Build: 0,
+            _Revision: 0,
+        }
+    }
+}
+
+export function parsePageNumber(page: unknown): number {
+    page ||= 0
+
+    if (typeof page === "string") {
+        page = parseInt(page, 10)
+    }
+
+    assert.equal(typeof page, "number")
+
+    page = Math.max(page as number, 0)
+    return page as number
 }

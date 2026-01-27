@@ -1,6 +1,6 @@
 /*
  *     The Peacock Project - a HITMAN server replacement.
- *     Copyright (C) 2021-2024 The Peacock Project Team
+ *     Copyright (C) 2021-2026 The Peacock Project Team
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU Affero General Public License as published by
@@ -113,6 +113,13 @@ body {
 
 .pagination-nav__item:first-child .pagination-nav__label::before {
     content: "" !important;
+}
+
+/* Fixed indicator for escalation level picker */
+.save-indicator {
+    position: fixed;
+    right: 2rem;
+    top: 50%;
 }
 
 /* RADIX DIALOG */
