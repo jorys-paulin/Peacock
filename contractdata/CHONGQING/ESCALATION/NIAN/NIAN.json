@@ -29,7 +29,7 @@
         "CreationTimestamp": "2021-01-12T12:24:16.194497Z",
         "CreatorUserId": "fadb923c-e6bb-4283-a537-eb4d1150262e",
         "TileImage": "images/contracts/escalation/ContractEscalation_Wet_Nian.jpg",
-        "Title": "UI_PEACOCK_NIAN",
+        "Title": "UI_PEACOCK_NIAN_NAME",
         "Description": "UI_PEACOCK_ESCALATION_CHONGQING_DESC",
         "CodeName_Hint": "Nian - Group",
         "Location": "LOCATION_WET_RAT",

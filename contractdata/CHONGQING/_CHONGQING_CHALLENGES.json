@@ -3376,7 +3376,7 @@
                 },
                 {
                     "Id": "d3307d53-bde8-435a-bffd-c2270c66792e",
-                    "Name": "UI_PEACOCK_NIAN",
+                    "Name": "UI_PEACOCK_NIAN_NAME",
                     "ImageName": "images/contracts/escalation/ContractEscalation_Wet_Nian.jpg",
                     "Description": "UI_CHALLENGES_ESCLATION_COMPLETE_DESC",
                     "Rewards": {

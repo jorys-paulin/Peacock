@@ -9,7 +9,7 @@
         ],
         "Objectives": [
             {
-                "_comment": "serve dishes",
+                "_comment": "serve dish",
                 "Id": "6dcbf0c6-7d39-4265-9b2b-ecc115fb85d0",
                 "Type": "statemachine",
                 "ObjectiveType": "custom",
@@ -53,16 +53,16 @@
                 }
             },
             {
-                "_comment": "visit neighbors with fire crackers",
-                "Id": "ff195884-816c-4259-b5f5-555511bebc1b",
+                "_comment": "concussion",
+                "Id": "acecde5b-7fd9-4103-978a-5a89c1e251ef",
                 "Type": "statemachine",
                 "ObjectiveType": "custom",
                 "Category": "Primary",
                 "Image": "images/stashpoints/wet_agencypickup_apartment.jpg",
-                "BriefingName": "$loc UI_PEACOCK_NIAN_OBJ_VISITNEIGHBOR_EXPLOSIVE_NAME",
-                "BriefingText": "$loc UI_PEACOCK_NIAN_OBJ_VISITNEIGHBOR_DESC",
+                "BriefingName": "$loc UI_PEACOCK_NIAN_OBJ_FIRECRACKER_NAME",
+                "BriefingText": "$loc UI_PEACOCK_NIAN_OBJ_FIRECRACKER_DESC",
                 "HUDTemplate": {
-                    "display": "$loc UI_PEACOCK_NIAN_OBJ_VISITNEIGHBOR_EXPLOSIVE_HUD"
+                    "display": "$loc UI_PEACOCK_NIAN_OBJ_FIRECRACKER_HUD"
                 },
                 "IsHidden": true,
                 "ForceShowOnLoadingScreen": true,
@@ -78,7 +78,7 @@
                     },
                     "States": {
                         "Start": {
-                            "Kill": [
+                            "Pacify": [
                                 {
                                     "Condition": {
                                         "$and": [
@@ -110,32 +110,6 @@
                                 },
                                 {
                                     "Condition": {
-                                        "$and": [
-                                            {
-                                                "$any": {
-                                                    "in": "$.Targets",
-                                                    "?": {
-                                                        "$eq": [
-                                                            "$.#",
-                                                            "$Value.RepositoryId"
-                                                        ]
-                                                    }
-                                                }
-                                            },
-                                            {
-                                                "$not": {
-                                                    "$eq": [
-                                                        "$Value.KillMethodBroad",
-                                                        "explosive"
-                                                    ]
-                                                }
-                                            }
-                                        ]
-                                    },
-                                    "Transition": "Failure"
-                                },
-                                {
-                                    "Condition": {
                                         "$eq": [
                                             "($.Targets).Count",
                                             "($.TargetsKilled).Count"
@@ -144,6 +118,70 @@
                                     "Transition": "Success"
                                 }
                             ]
+                        }
+                    }
+                }
+            },
+            {
+                "_comment": "iron pacify angus",
+                "Id": "a5443cfa-3dd1-4ecb-acce-ba528035fb29",
+                "Type": "statemachine",
+                "ObjectiveType": "custom",
+                "Category": "Primary",
+                "Image": "images/contracts/escalation/contractescalation_wet_nian_obj_ironing.jpg",
+                "BriefingName": "$loc UI_PEACOCK_NIAN_OBJ_IRONING_NAME",
+                "BriefingText": "$loc UI_PEACOCK_NIAN_OBJ_IRONING_DESC",
+                "HUDTemplate": {
+                    "display": "$loc UI_PEACOCK_NIAN_OBJ_IRONING_DESC"
+                },
+                "ForceShowOnLoadingScreen": true,
+                "Definition": {
+                    "Scope": "hit",
+                    "Context": {
+                        "Targets": ["a2429d84-2b78-42c4-a88d-82b8984ca92d"],
+                        "TargetsKilled": []
+                    },
+                    "States": {
+                        "Start": {
+                            "Pacify": [
+                                {
+                                    "Condition": {
+                                        "$and": [
+                                            {
+                                                "$eq": [
+                                                    "a2429d84-2b78-42c4-a88d-82b8984ca92d",
+                                                    "$Value.RepositoryId"
+                                                ]
+                                            },
+                                            {
+                                                "$eq": [
+                                                    "7268dbea-7a1c-47f5-b846-f0445404ec14",
+                                                    "$Value.KillItemRepositoryId"
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    "Transition": "Success"
+                                },
+                                {
+                                    "Condition": {
+                                        "$eq": [
+                                            "a2429d84-2b78-42c4-a88d-82b8984ca92d",
+                                            "$Value.RepositoryId"
+                                        ]
+                                    },
+                                    "Transition": "Failure"
+                                }
+                            ],
+                            "Kill": {
+                                "Condition": {
+                                    "$eq": [
+                                        "a2429d84-2b78-42c4-a88d-82b8984ca92d",
+                                        "$Value.RepositoryId"
+                                    ]
+                                },
+                                "Transition": "Failure"
+                            }
                         }
                     }
                 }
@@ -167,7 +205,7 @@
                 ]
             }
         ],
-        "GameChangers": ["2873db55-1bab-427c-9db5-72ede3a13aa6"],
+        "GameChangers": ["562c54f5-8363-4942-ac1e-6dd179ab1597"],
         "GameChangerReferences": []
     },
     "Metadata": {
@@ -176,7 +214,7 @@
         "CreationTimestamp": "2021-01-12T12:24:16.194497Z",
         "CreatorUserId": "fadb923c-e6bb-4283-a537-eb4d1150262e",
         "TileImage": "images/contracts/escalation/ContractEscalation_Wet_Nian.jpg",
-        "Title": "UI_PEACOCK_NIAN2",
+        "Title": "UI_PEACOCK_NIAN2_NAME",
         "Description": "UI_PEACOCK_ESCALATION_CHONGQING_DESC",
         "CodeName_Hint": "Nian Level 2",
         "Location": "LOCATION_WET_RAT",
@@ -185,15 +223,18 @@
         "Type": "escalation",
         "GroupObjectiveDisplayOrder": [
             {
-                "Id": "ff195884-816c-4259-b5f5-555511bebc1b",
+                "Id": "a5443cfa-3dd1-4ecb-acce-ba528035fb29",
                 "IsNew": true
             },
             {
-                "Id": "2873db55-1bab-427c-9db5-72ede3a13aa6",
+                "Id": "562c54f5-8363-4942-ac1e-6dd179ab1597",
                 "IsNew": true
             },
             {
                 "Id": "6dcbf0c6-7d39-4265-9b2b-ecc115fb85d0"
+            },
+            {
+                "Id": "acecde5b-7fd9-4103-978a-5a89c1e251ef"
             }
         ],
         "InGroup": "5d0668b9-665f-48a7-a72c-6f5614b350a2",
