@@ -64,11 +64,12 @@
                 "Definition": {
                     "Scope": "hit",
                     "Context": {
-                        "Targets": [
+                        "Targets": [],
+                        "TargetsPending": [
                             "fc776f90-eda8-4aaf-83d9-bb069c3827ab",
                             "18324739-f01e-47f4-8c8b-c7f880805491"
                         ],
-                        "TargetsKilled": []
+                        "TargetsPacified": []
                     },
                     "States": {
                         "Start": {
@@ -78,7 +79,7 @@
                                         "$and": [
                                             {
                                                 "$any": {
-                                                    "in": "$.Targets",
+                                                    "in": "$.TargetsPending",
                                                     "?": {
                                                         "$eq": [
                                                             "$.#",
@@ -88,16 +89,26 @@
                                                 }
                                             },
                                             {
-                                                "$eq": [
-                                                    "$Value.KillMethodBroad",
-                                                    "explosive"
+                                                "$or": [
+                                                    {
+                                                        "$eq": [
+                                                            "$Value.KillMethodBroad",
+                                                            "explosive"
+                                                        ]
+                                                    },
+                                                    {
+                                                        "$eq": [
+                                                            "$Value.KillMethodStrict",
+                                                            "accident_explosion"
+                                                        ]
+                                                    }
                                                 ]
                                             }
                                         ]
                                     },
                                     "Actions": {
                                         "$pushunique": [
-                                            "TargetsKilled",
+                                            "TargetsPacified",
                                             "$Value.RepositoryId"
                                         ]
                                     }
@@ -105,8 +116,8 @@
                                 {
                                     "Condition": {
                                         "$eq": [
-                                            "($.Targets).Count",
-                                            "($.TargetsKilled).Count"
+                                            "($.TargetsPending).Count",
+                                            "($.TargetsPacified).Count"
                                         ]
                                     },
                                     "Transition": "Success"

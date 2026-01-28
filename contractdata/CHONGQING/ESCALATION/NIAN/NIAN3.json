@@ -70,11 +70,12 @@
                 "Definition": {
                     "Scope": "hit",
                     "Context": {
-                        "Targets": [
+                        "Targets": [],
+                        "TargetsPending": [
                             "fc776f90-eda8-4aaf-83d9-bb069c3827ab",
                             "18324739-f01e-47f4-8c8b-c7f880805491"
                         ],
-                        "TargetsKilled": []
+                        "TargetsPacified": []
                     },
                     "States": {
                         "Start": {
@@ -84,7 +85,7 @@
                                         "$and": [
                                             {
                                                 "$any": {
-                                                    "in": "$.Targets",
+                                                    "in": "$.TargetsPending",
                                                     "?": {
                                                         "$eq": [
                                                             "$.#",
@@ -94,16 +95,26 @@
                                                 }
                                             },
                                             {
-                                                "$eq": [
-                                                    "$Value.KillMethodBroad",
-                                                    "explosive"
+                                                "$or": [
+                                                    {
+                                                        "$eq": [
+                                                            "$Value.KillMethodBroad",
+                                                            "explosive"
+                                                        ]
+                                                    },
+                                                    {
+                                                        "$eq": [
+                                                            "$Value.KillMethodStrict",
+                                                            "accident_explosion"
+                                                        ]
+                                                    }
                                                 ]
                                             }
                                         ]
                                     },
                                     "Actions": {
                                         "$pushunique": [
-                                            "TargetsKilled",
+                                            "TargetsPacified",
                                             "$Value.RepositoryId"
                                         ]
                                     }
@@ -111,93 +122,8 @@
                                 {
                                     "Condition": {
                                         "$eq": [
-                                            "($.Targets).Count",
-                                            "($.TargetsKilled).Count"
-                                        ]
-                                    },
-                                    "Transition": "Success"
-                                }
-                            ]
-                        }
-                    }
-                }
-            },
-            {
-                "_comment": "one time explosion",
-                "Id": "5e0ba90d-d126-4c0a-8d2d-9e2c47202a81",
-                "Type": "statemachine",
-                "ObjectiveType": "custom",
-                "Category": "Primary",
-                "Image": "images/contractconditions/condition_killmethod_explosion.jpg",
-                "BriefingName": "$loc UI_PEACOCK_NIAN_OBJ_FIRECRACKER_ONEHIT_NAME",
-                "BriefingText": "$loc UI_PEACOCK_NIAN_OBJ_FIRECRACKER_ONEHIT_DESC",
-                "HUDTemplate": {
-                    "display": "$loc UI_PEACOCK_NIAN_OBJ_FIRECRACKER_ONEHIT_DESC",
-                    "iconType": 17
-                },
-                "ForceShowOnLoadingScreen": true,
-                "Definition": {
-                    "Scope": "hit",
-                    "Context": {
-                        "Targets": [
-                            "fc776f90-eda8-4aaf-83d9-bb069c3827ab",
-                            "18324739-f01e-47f4-8c8b-c7f880805491"
-                        ],
-                        "TargetsKilled": []
-                    },
-                    "States": {
-                        "Start": {
-                            "Kill": {
-                                "Condition": {
-                                    "$any": {
-                                        "?": {
-                                            "$eq": [
-                                                "$.#",
-                                                "$Value.RepositoryId"
-                                            ]
-                                        },
-                                        "in": "$.Targets"
-                                    }
-                                },
-                                "Actions": {
-                                    "$pushunique": [
-                                        "TargetsKilled",
-                                        "$Value.RepositoryId"
-                                    ]
-                                },
-                                "Transition": "CheckStreakKill"
-                            }
-                        },
-                        "CheckStreakKill": {
-                            "$timer": {
-                                "Condition": { "$after": 1 },
-                                "Transition": "Failure"
-                            },
-                            "Kill": [
-                                {
-                                    "Condition": {
-                                        "$any": {
-                                            "?": {
-                                                "$eq": [
-                                                    "$.#",
-                                                    "$Value.RepositoryId"
-                                                ]
-                                            },
-                                            "in": "$.Targets"
-                                        }
-                                    },
-                                    "Actions": {
-                                        "$pushunique": [
-                                            "TargetsKilled",
-                                            "$Value.RepositoryId"
-                                        ]
-                                    }
-                                },
-                                {
-                                    "Condition": {
-                                        "$eq": [
-                                            "($.Targets).Count",
-                                            "($.TargetsKilled).Count"
+                                            "($.TargetsPending).Count",
+                                            "($.TargetsPacified).Count"
                                         ]
                                     },
                                     "Transition": "Success"
@@ -311,12 +237,11 @@
         "Type": "escalation",
         "GroupObjectiveDisplayOrder": [
             {
-                "Id": "5e0ba90d-d126-4c0a-8d2d-9e2c47202a81",
+                "Id": "2873db55-1bab-427c-9db5-72ede3a13aa6",
                 "IsNew": true
             },
             {
-                "Id": "2873db55-1bab-427c-9db5-72ede3a13aa6",
-                "IsNew": true
+                "Id": "a5443cfa-3dd1-4ecb-acce-ba528035fb29"
             },
             {
                 "Id": "562c54f5-8363-4942-ac1e-6dd179ab1597"
