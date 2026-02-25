@@ -24,6 +24,7 @@ import {
     isSuit,
     parsePageNumber,
     unlockLevelComparer,
+    unlockOrderComparer,
     uuidRegex,
 } from "./utils"
 import { contractSessions, enqueueEvent, getSession } from "./eventHandler"
@@ -660,7 +661,8 @@ function generateSelectPage(
                         ?.Level.toString() ?? "1"
                 return unlockable
             })
-            .sort(unlockLevelComparer),
+            .sort(unlockLevelComparer)
+            .sort(unlockOrderComparer),
         UserCentric: generateUserCentric(contractData, userId, gameVersion)!,
     }
 

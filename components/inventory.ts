@@ -44,6 +44,7 @@ import {
     TOMORROWLAND_UNLOCKABLES,
     TRINITY_UNLOCKABLES,
     WINTERSPORTS_UNLOCKABLES,
+    FILUR_UNLOCKABLES,
 } from "./ownership"
 import { EPIC_NAMESPACE_2016 } from "./platformEntitlements"
 import { controller } from "./controller"
@@ -85,6 +86,7 @@ const DELUXE_DATA = [
     ...FRENCHMARTINI_UNLOCKABLES,
     ...BAIJU_UNLOCKABLES,
     ...BELLINI_UNLOCKABLES,
+    ...FILUR_UNLOCKABLES,
 ]
 
 /**
@@ -465,6 +467,13 @@ function filterAllowedContent(gameVersion: GameVersion, entP: string[]) {
             return (
                 e.includes("0047ddcd5e6846e881f1037c1416e3d9") ||
                 e.includes("4097630")
+            )
+        }
+
+        if (FILUR_UNLOCKABLES.includes(id)) {
+            return (
+                e.includes("b135c766d25948c39d7dd316dbc4db53") ||
+                e.includes("4328240")
             )
         }
 

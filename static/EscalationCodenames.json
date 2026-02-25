@@ -903,6 +903,12 @@
             "isPeacock": true
         },
         {
+            "codename": "Guava",
+            "name": "The Contagion",
+            "id": "34c21c64-515a-4a43-9fd0-378211060122",
+            "levels": 2
+        },
+        {
             "codename": "Tamarillo",
             "name": "The Antithesis",
             "id": "6678cf8a-f614-4536-9584-e649351f40c2",
