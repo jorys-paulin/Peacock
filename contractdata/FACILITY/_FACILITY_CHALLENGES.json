@@ -1510,6 +1510,58 @@
                     }
                 },
                 {
+                    "Id": "9de8a576-4647-4afa-b999-c8ce251f7cc7",
+                    "Name": "UI_CHALLENGES_PROLOGUE_FIRST_SPEEDRUN_NAME",
+                    "ImageName": "images/challenges/lat73/prologue_initiatesfirstspeedrun.jpg",
+                    "Description": "UI_CHALLENGES_PROLOGUE_FIRST_SPEEDRUN_DESC",
+                    "Rewards": {
+                        "MasteryXP": 2000
+                    },
+                    "Drops": [
+                        "TOKEN_OUTFIT_REWARD_GREENLAND_HERO_TRAININGSUITWITHGLOVES"
+                    ],
+                    "IsPlayable": true,
+                    "IsLocked": false,
+                    "HideProgression": true,
+                    "CategoryName": "UI_MENU_PAGE_PROFILE_CHALLENGES_CATEGORY_COMMUNITY",
+                    "Icon": "challenge_category_feats",
+                    "LocationId": "LOCATION_PARENT_ICA_FACILITY",
+                    "ParentLocationId": "LOCATION_PARENT_ICA_FACILITY",
+                    "Type": "contract",
+                    "DifficultyLevels": [],
+                    "OrderIndex": 10000,
+                    "XpModifier": {},
+                    "RuntimeType": "Hit",
+                    "Definition": {
+                        "Scope": "session",
+                        "States": {
+                            "Start": {
+                                "IntroCutEnd": {
+                                    "Transition": "TimerStart"
+                                }
+                            },
+                            "TimerStart": {
+                                "$timer": {
+                                    "Condition": {
+                                        "$after": 120
+                                    },
+                                    "Transition": "Failure"
+                                },
+                                "ContractEnd": {
+                                    "Transition": "Success"
+                                },
+                                "Disguise": {
+                                    "Transition": "Failure"
+                                }
+                            }
+                        }
+                    },
+                    "Tags": ["story", "medium", "feats"],
+                    "InclusionData": {
+                        "ContractIds": ["b573932d-7a34-44f1-bcf4-ea8f79f75710"]
+                    }
+                },
+                {
                     "Id": "df35b620-ca4d-40f1-ae50-9297585ede5d",
                     "Name": "UI_CHALLENGES_PROLOGUE_NORFOLK_MEETING_NAME",
                     "ImageName": "images/challenges/lat73/prologue_c_norfolk_meeting.jpg",
