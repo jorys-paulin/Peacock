@@ -131,7 +131,8 @@ app.use(function badPathRewritingMiddleware(req, _, next) {
     if (qIdx === -1) {
         req.url = req.url.replaceAll("//", "/")
     } else {
-        req.url = req.url.slice(0, qIdx).replaceAll("//", "/") + req.url.slice(qIdx)
+        req.url =
+            req.url.slice(0, qIdx).replaceAll("//", "/") + req.url.slice(qIdx)
     }
 
     next()
@@ -225,7 +226,8 @@ app.get(
                     "steam-prod_8"
                 break
             case "https://appleid.apple.com":
-                config.Versions[0].SERVER_VER.GlobalAuthentication.RequestedAudience = "apple-prod_8"
+                config.Versions[0].SERVER_VER.GlobalAuthentication.RequestedAudience =
+                    "apple-prod_8"
                 break
         }
 
