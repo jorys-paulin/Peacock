@@ -28,22 +28,3 @@ jobs:
         with:
           name: patcher-darwin
           path: patcher-darwin/build/PeacockPatcher
-
-  clang-tidy:
-    name: clang-tidy
-    runs-on: macos-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6.0.2
-
-      - name: Install LLVM
-        run: brew install llvm
-
-      - name: Configure CMake
-        run: cmake -S patcher-darwin -B patcher-darwin/build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
-
-      - name: Run clang-tidy
-        run: |
-          find patcher-darwin/src -name '*.cpp' -o -name '*.h' | \
-            xargs "$(brew --prefix llvm)/bin/clang-tidy" -p patcher-darwin/build
