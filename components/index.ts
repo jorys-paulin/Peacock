@@ -531,20 +531,24 @@ export async function startServer(options: {
         await setupFileStructure()
 
         if (options.hmr) {
-            void setupHotListener("contracts", () => {
-                log(
-                    LogLevel.INFO,
-                    "Detected a change in contracts! Re-indexing...",
-                )
-                // eslint-disable-next-line promise/catch-or-return
-                controller.index().then(() => {
-                    return log(
+            void setupHotListener(
+                "contracts",
+                () => {
+                    log(
                         LogLevel.INFO,
-                        "Completed re-indexing.",
-                        "contracts",
+                        "Detected a change in contracts! Re-indexing...",
                     )
-                })
-            }, true)
+                    // eslint-disable-next-line promise/catch-or-return
+                    controller.index().then(() => {
+                        return log(
+                            LogLevel.INFO,
+                            "Completed re-indexing.",
+                            "contracts",
+                        )
+                    })
+                },
+                true,
+            )
         }
 
         // once contracts directory is present, we are clear to boot
