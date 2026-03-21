@@ -75,9 +75,9 @@ export class ProgressionService {
         if (dropIds.length > 0) {
             controller.inventoryService.grantDrops(
                 userProfile.Id,
-                controller.inventoryService.getUnlockablesById(dropIds, contractSession.gameVersion).filter(
-                    Boolean,
-                ) as Unlockable[],
+                controller.inventoryService
+                    .getUnlockablesById(dropIds, contractSession.gameVersion)
+                    .filter(Boolean) as Unlockable[],
             )
         }
 
@@ -115,7 +115,10 @@ export class ProgressionService {
             .filter((drop) => drop.Level > minLevel && drop.Level <= maxLevel)
             .map((drop) => drop.Id)
 
-        const unlockables = controller.inventoryService.getUnlockablesById(unlockableIds, gameVersion)
+        const unlockables = controller.inventoryService.getUnlockablesById(
+            unlockableIds,
+            gameVersion,
+        )
 
         /**
          * If missions type is evergreen, checks if any of the unlockables has unlockable gear, and award those too
@@ -233,7 +236,10 @@ export class ProgressionService {
                         previousLevel,
                         locationData.Level,
                     ).filter(Boolean) as Unlockable[]
-                    controller.inventoryService.grantDrops(userProfile.Id, masteryLocationDrops)
+                    controller.inventoryService.grantDrops(
+                        userProfile.Id,
+                        masteryLocationDrops,
+                    )
                 }
             }
 

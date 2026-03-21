@@ -205,7 +205,12 @@ profileRouter.post(
     "/UnlockableService/GetInventory",
     // @ts-expect-error Has jwt props.
     (req: RequestWithJwt, res) => {
-        res.json(controller.inventoryService.createInventory(req.jwt.unique_name, req.gameVersion))
+        res.json(
+            controller.inventoryService.createInventory(
+                req.jwt.unique_name,
+                req.gameVersion,
+            ),
+        )
     },
 )
 
@@ -259,7 +264,10 @@ profileRouter.post(
         writeUserData(req.jwt.unique_name, req.gameVersion)
 
         res.json({
-            Inventory: controller.inventoryService.createInventory(req.jwt.unique_name, req.gameVersion),
+            Inventory: controller.inventoryService.createInventory(
+                req.jwt.unique_name,
+                req.gameVersion,
+            ),
             Stats: req.body.localStats,
         })
     },

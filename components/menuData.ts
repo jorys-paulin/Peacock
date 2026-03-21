@@ -569,7 +569,10 @@ function generateSelectPage(
         false,
     )
 
-    const inventory = controller.inventoryService.createInventory(userId, gameVersion)
+    const inventory = controller.inventoryService.createInventory(
+        userId,
+        gameVersion,
+    )
 
     const allunlockables = getVersionedConfig<Unlockable[]>(
         "allunlockables",
@@ -862,7 +865,10 @@ async function lookupContractPublicId(
         }
     }
 
-    const location = controller.inventoryService.getUnlockableById(contract.Metadata.Location, gameVersion)
+    const location = controller.inventoryService.getUnlockableById(
+        contract.Metadata.Location,
+        gameVersion,
+    )
 
     return {
         Contract: contract,

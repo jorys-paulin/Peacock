@@ -1049,7 +1049,10 @@ export async function getMissionEndData(
     }
 
     if (contractData.Metadata.Type === "sniper") {
-        const userInventory = controller.inventoryService.createInventory(jwt.unique_name, gameVersion)
+        const userInventory = controller.inventoryService.createInventory(
+            jwt.unique_name,
+            gameVersion,
+        )
 
         const [sniperScore, headlines] = calculateSniperScore(
             sessionDetails,
@@ -1160,7 +1163,10 @@ export async function getMissionEndData(
     // If this isn't a dry run (and mastery progression is enabled), grant drops
     // if the user's inventory doesn't already have it.
     if (!isDryRun && getFlag("enableMasteryProgression")) {
-        const userInventory = controller.inventoryService.createInventory(jwt.unique_name, gameVersion)
+        const userInventory = controller.inventoryService.createInventory(
+            jwt.unique_name,
+            gameVersion,
+        )
 
         const toGrant = masteryDrops
             .filter(
@@ -1179,10 +1185,11 @@ export async function getMissionEndData(
         calculateXpResult.completedChallenges.reduce(
             (acc: MissionEndDrop[], challenge) => {
                 if (challenge?.Drops?.length) {
-                    const drops = controller.inventoryService.getUnlockablesById(
-                        challenge.Drops,
-                        gameVersion,
-                    )
+                    const drops =
+                        controller.inventoryService.getUnlockablesById(
+                            challenge.Drops,
+                            gameVersion,
+                        )
                     delete challenge.Drops
 
                     for (const drop of drops) {

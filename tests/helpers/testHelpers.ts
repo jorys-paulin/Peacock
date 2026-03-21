@@ -26,7 +26,10 @@ import { mockDatabaseFs, MockedFsReturn } from "../mocks/databaseHandlerMock"
 import type { DataStorageFs } from "../../components/databaseHandler"
 import process from "node:process"
 import { resolve } from "node:path"
-import { Controller, _dangerouslyOverwriteController } from "../../components/controller"
+import {
+    Controller,
+    _dangerouslyOverwriteController,
+} from "../../components/controller"
 import { loadConfig } from "../mocks/configSwizzleManager"
 
 export function asMock<T>(value: T): Mock {

@@ -82,10 +82,16 @@ export function getMultiplayerLoadoutData(
     disguiseUnlockableId: string,
     gameVersion: GameVersion,
 ) {
-    let unlockable = controller.inventoryService.getUnlockableById(disguiseUnlockableId, gameVersion)
+    let unlockable = controller.inventoryService.getUnlockableById(
+        disguiseUnlockableId,
+        gameVersion,
+    )
 
     if (!unlockable || unlockable.Type !== "disguise") {
-        unlockable = controller.inventoryService.getUnlockableById("TOKEN_OUTFIT_HITMANSUIT", gameVersion)
+        unlockable = controller.inventoryService.getUnlockableById(
+            "TOKEN_OUTFIT_HITMANSUIT",
+            gameVersion,
+        )
 
         assert.ok(unlockable)
     }

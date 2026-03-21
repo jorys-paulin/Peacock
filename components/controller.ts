@@ -1573,8 +1573,7 @@ export async function preserveContracts(
 // This lets us do that until we can get everything to use the IoC model.
 const controllerContainer = { instance: new Controller() }
 
-export const controller: Controller =
-    createDelegatingProxy(controllerContainer)
+export const controller: Controller = createDelegatingProxy(controllerContainer)
 
 /**
  * Replaces the global controller instance. Don't use outside of tests.

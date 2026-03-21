@@ -340,7 +340,10 @@ export function getSafehouseCategory(
     gameVersion: GameVersion,
     jwt: JwtData,
 ) {
-    const inventory = controller.inventoryService.createInventory(jwt.unique_name, gameVersion)
+    const inventory = controller.inventoryService.createInventory(
+        jwt.unique_name,
+        gameVersion,
+    )
 
     let safehouseData: SafehouseCategory = {
         Category: "_root",

@@ -207,13 +207,10 @@ export class InventoryService {
         suitOverride?: string | undefined,
     ): string {
         type Cast = keyof typeof defaultSuits
-        return suitOverride &&
-            this.getUnlockableById(suitOverride, gameVersion)
+        return suitOverride && this.getUnlockableById(suitOverride, gameVersion)
             ? suitOverride
             : defaultSuits[subLocation.Id as Cast] ||
-                  defaultSuits[
-                      subLocation.Properties.ParentLocation as Cast
-                  ] ||
+                  defaultSuits[subLocation.Properties.ParentLocation as Cast] ||
                   "TOKEN_OUTFIT_HITMANSUIT"
     }
 
@@ -268,10 +265,7 @@ export class InventoryService {
         challengesUnlockables: Record<string, string>,
         gameVersion: GameVersion,
     ) {
-        return (
-            acc: [Unlockable[], Unlockable[]],
-            unlockable: Unlockable,
-        ) => {
+        return (acc: [Unlockable[], Unlockable[]], unlockable: Unlockable) => {
             let unlockableChallengeId: string
             let unlockableMasteryData: UnlockableMasteryData | undefined
 
@@ -294,8 +288,7 @@ export class InventoryService {
 
             // If the unlockable is challenge reward, check if user has the challenge completed
             else if (
-                (unlockableChallengeId =
-                    challengesUnlockables[unlockable.Id])
+                (unlockableChallengeId = challengesUnlockables[unlockable.Id])
             ) {
                 const challenge =
                     userProfile.Extensions?.ChallengeProgression?.[
@@ -766,8 +759,7 @@ export class InventoryService {
             ...new Set([
                 ...(this.inventoryUserCache.get(profileId) || []),
                 ...inventoryItems.filter(
-                    (invItem) =>
-                        invItem.Unlockable.Type !== "evergreenmastery",
+                    (invItem) => invItem.Unlockable.Type !== "evergreenmastery",
                 ),
             ]),
         ])

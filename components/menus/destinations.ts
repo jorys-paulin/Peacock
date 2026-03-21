@@ -398,7 +398,10 @@ export function getDestination(
     }
 
     if (gameVersion === "h1" && LOCATION !== "LOCATION_PARENT_ICA_FACILITY") {
-        const inventory = controller.inventoryService.createInventory(userId, gameVersion)
+        const inventory = controller.inventoryService.createInventory(
+            userId,
+            gameVersion,
+        )
 
         response.DifficultyData = {
             AvailableDifficultyModes: [

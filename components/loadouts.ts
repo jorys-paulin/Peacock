@@ -183,7 +183,11 @@ export class Loadouts {
                 gameVersion === "h1"
                     ? "FIREARMS_HERO_PISTOL_TACTICAL_001_SU_SKIN01"
                     : "FIREARMS_HERO_PISTOL_TACTICAL_ICA_19",
-            3: controller.inventoryService.getDefaultSuitFor(sublocation, gameVersion, suitOverride),
+            3: controller.inventoryService.getDefaultSuitFor(
+                sublocation,
+                gameVersion,
+                suitOverride,
+            ),
             4: "TOKEN_FIBERWIRE",
             5: "PROP_TOOL_COIN",
         }
@@ -225,7 +229,10 @@ export class Loadouts {
             const item = (() => {
                 if (
                     loadout[idx] &&
-                    controller.inventoryService.getUnlockableById(loadout[idx], gameVersion)
+                    controller.inventoryService.getUnlockableById(
+                        loadout[idx],
+                        gameVersion,
+                    )
                 ) {
                     return loadout[idx]
                 }
