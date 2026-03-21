@@ -44,7 +44,6 @@ import { getConfig } from "../configSwizzleManager"
 import { getUserData, writeUserData } from "../databaseHandler"
 import { getMaxProfileLevel, nilUuid, unlockOrderComparer } from "../utils"
 
-import { createInventory, getUnlockableById } from "../inventory"
 import { createSniperLoadouts, SniperCharacter, SniperLoadout } from "./sniper"
 import { getFlag } from "../flags"
 import { loadouts } from "../loadouts"
@@ -256,7 +255,7 @@ export async function getPlanningData(
 
     const entrancesInScene = entranceData[scenePath]
 
-    const typedInv = createInventory(
+    const typedInv = controller.inventoryService.createInventory(
         userId,
         gameVersion,
         sublocation,
@@ -409,7 +408,7 @@ export async function getPlanningData(
         sublocation?.Properties?.LimitedLoadout &&
         getFlag("enableMasteryProgression")
     ) {
-        const loadoutUnlockable = getUnlockableById(
+        const loadoutUnlockable = controller.inventoryService.getUnlockableById(
             gameVersion === "h1"
                 ? // @ts-expect-error This works.
                   sublocation?.Properties?.NormalLoadoutUnlock[

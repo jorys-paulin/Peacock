@@ -18,7 +18,6 @@
 
 import { getSubLocationByName } from "../contracts/dataGen"
 import { controller } from "../controller"
-import { getUnlockablesById, grantDrops } from "../inventory"
 import type {
     ContractSession,
     GameVersion,
@@ -74,9 +73,9 @@ export class ProgressionService {
         // Award provided drops. E.g. From challenges. Don't run this function
         // if there aren't any drops being granted.
         if (dropIds.length > 0) {
-            grantDrops(
+            controller.inventoryService.grantDrops(
                 userProfile.Id,
-                getUnlockablesById(dropIds, contractSession.gameVersion).filter(
+                controller.inventoryService.getUnlockablesById(dropIds, contractSession.gameVersion).filter(
                     Boolean,
                 ) as Unlockable[],
             )
@@ -116,7 +115,7 @@ export class ProgressionService {
             .filter((drop) => drop.Level > minLevel && drop.Level <= maxLevel)
             .map((drop) => drop.Id)
 
-        const unlockables = getUnlockablesById(unlockableIds, gameVersion)
+        const unlockables = controller.inventoryService.getUnlockablesById(unlockableIds, gameVersion)
 
         /**
          * If missions type is evergreen, checks if any of the unlockables has unlockable gear, and award those too
@@ -134,7 +133,7 @@ export class ProgressionService {
 
             if (evergreenGearUnlockables.length) {
                 unlockables.push(
-                    ...getUnlockablesById(
+                    ...controller.inventoryService.getUnlockablesById(
                         evergreenGearUnlockables,
                         gameVersion,
                     ),
@@ -234,7 +233,7 @@ export class ProgressionService {
                         previousLevel,
                         locationData.Level,
                     ).filter(Boolean) as Unlockable[]
-                    grantDrops(userProfile.Id, masteryLocationDrops)
+                    controller.inventoryService.grantDrops(userProfile.Id, masteryLocationDrops)
                 }
             }
 

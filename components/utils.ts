@@ -36,7 +36,28 @@ import { getFlag } from "./flags"
 import { getConfig, getVersionedConfig } from "./configSwizzleManager"
 import { compare } from "semver"
 import assert from "assert"
-import { getUnlockableById } from "./inventory"
+
+const _deprecatedOnce = new Set<string>()
+
+/**
+ * Logs a deprecation warning once per name.
+ * @param key The module/function/property name (e.g. "inventory.grantDrops").
+ * @param replacement The replacement to suggest.
+ * @param removeIn The version in which the deprecated item will be removed.
+ */
+export function deprecated(
+    key: string,
+    replacement: string,
+    removeIn: string,
+): void {
+    if (_deprecatedOnce.has(key)) return
+    _deprecatedOnce.add(key)
+
+    log(
+        LogLevel.WARN,
+        `${key} is deprecated and will be removed in ${removeIn}, use ${replacement} instead!`,
+    )
+}
 
 /**
  * True if the server is being run by the launcher, false otherwise.
@@ -570,27 +591,6 @@ export function attainableDefaults(gameVersion: GameVersion): string[] {
     }
 }
 
-/**
- * Gets the default suit for a given sub-location and parent location.
- * Priority is given to the sub-location, then the parent location, then 47's signature suit.
- *
- * @param subLocation The sub-location.
- * @param gameVersion The game version.
- * @param suitOverride A default suit override for this contract.
- * @returns The default suit for the given sub-location and parent location.
- */
-export function getDefaultSuitFor(
-    subLocation: Unlockable,
-    gameVersion: GameVersion,
-    suitOverride?: string | undefined,
-): string {
-    type Cast = keyof typeof defaultSuits
-    return suitOverride && getUnlockableById(suitOverride, gameVersion)
-        ? suitOverride
-        : defaultSuits[subLocation.Id as Cast] ||
-              defaultSuits[subLocation.Properties.ParentLocation as Cast] ||
-              "TOKEN_OUTFIT_HITMANSUIT"
-}
 
 export const nilUuid = "00000000-0000-0000-0000-000000000000"
 
