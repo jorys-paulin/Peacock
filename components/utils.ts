@@ -37,10 +37,8 @@ import { getConfig, getVersionedConfig } from "./configSwizzleManager"
 import { compare } from "semver"
 import assert from "assert"
 
-const _deprecatedOnce = new Set<string>()
-
 /**
- * Logs a deprecation warning once per name.
+ * Logs a deprecation warning.
  * @param key The module/function/property name (e.g. "inventory.grantDrops").
  * @param replacement The replacement to suggest.
  * @param removeIn The version in which the deprecated item will be removed.
@@ -50,9 +48,6 @@ export function deprecated(
     replacement: string,
     removeIn: string,
 ): void {
-    if (_deprecatedOnce.has(key)) return
-    _deprecatedOnce.add(key)
-
     log(
         LogLevel.WARN,
         `${key} is deprecated and will be removed in ${removeIn}, use ${replacement} instead!`,
