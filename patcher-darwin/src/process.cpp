@@ -1,5 +1,6 @@
 #include "process.h"
 
+#include <cstring>
 #include <libproc.h>
 #include <mach-o/dyld_images.h>
 #include <mach-o/loader.h>
@@ -89,9 +90,11 @@ namespace peacock {
             if (lc.cmd == LC_SEGMENT_64) {
                 segment_command_64 seg{};
                 out_size = sizeof(seg);
-                mach_vm_read_overwrite(
+                kr = mach_vm_read_overwrite(
                     task, cmd_offset, sizeof(seg),
                     reinterpret_cast<mach_vm_address_t>(&seg), &out_size);
+                if (kr != KERN_SUCCESS)
+                    return false;
 
                 // skip __PAGEZERO — it's a non-readable guard region
                 if (strcmp(seg.segname, SEG_PAGEZERO) == 0) {
@@ -173,9 +176,9 @@ namespace peacock {
             return false;
         }
 
-        compute_image_size(task, base_address, image_size);
+        const bool ok = compute_image_size(task, base_address, image_size);
 
         mach_port_deallocate(mach_task_self(), task);
-        return true;
+        return ok;
     }
 }

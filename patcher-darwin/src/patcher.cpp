@@ -32,8 +32,12 @@ namespace peacock {
         if (!scanned)
             return nullptr;
 
-        PatchRegistry::instance().add_version(identifier, std::move(*scanned));
-        return PatchRegistry::instance().find_version(identifier);
+        if (identifier != 0) {
+            PatchRegistry::instance().add_version(identifier, std::move(*scanned));
+            return PatchRegistry::instance().find_version(identifier);
+        }
+
+        return new HitmanVersion(std::move(*scanned));
     }
 
     /// Collect patches to apply based on user options.
@@ -91,6 +95,7 @@ namespace peacock {
             if (!Memory::write(task, addr, data_to_write.data(),
                                data_to_write.size())) {
                 log("Failed to write at offset 0x" + to_hex(patch->offset));
+                Memory::protect(task, addr, data_to_write.size(), old_prot, nullptr);
                 return false;
             }
 
@@ -159,8 +164,15 @@ namespace peacock {
 
         const auto patches = collect_patches(*version, options);
 
-        // Build the custom URL bytes
+        // Build the custom URL bytes (must fit in the configdomain buffer)
+        static constexpr size_t kMaxConfigDomainLen = 256;
         const std::string &url = options.custom_config_domain;
+        if (url.size() >= kMaxConfigDomainLen) {
+            log("Custom config domain too long (" + std::to_string(url.size()) +
+                " bytes, max " + std::to_string(kMaxConfigDomainLen - 1) + ")");
+            Memory::close_task(task);
+            return false;
+        }
         std::vector<uint8_t> url_bytes(url.begin(), url.end());
         url_bytes.push_back(0x00);
 

@@ -1,5 +1,6 @@
 #include "scanner.h"
 #include "log.h"
+#include <cstring>
 
 namespace peacock {
     // ARM64 instructions are 4-byte aligned; use step of 4 instead of 16
@@ -63,9 +64,11 @@ namespace peacock {
         const uint8_t effective_alignment = alignment + leading_wildcards;
 
         const size_t pat_len = byte_pattern.size();
-        const size_t search_end = data.size() - pat_len;
 
-        for (size_t i = effective_alignment; i < search_end; i += kArm64InstructionAlignment) {
+        if (data.size() < pat_len)
+            return results;
+
+        for (size_t i = effective_alignment; i + pat_len <= data.size(); i += kArm64InstructionAlignment) {
             if (data[i] != byte_pattern[0])
                 continue;
 
@@ -203,7 +206,7 @@ namespace peacock {
         // Verify the cbz: byte 3 should be 0x34 (CBZ w-register)
         if (auth1_orig[3] != 0x34) {
             log("AOB scan failed: expected CBZ at authheader patch 1 "
-                "(got 0x" + std::to_string(auth1_orig[3]) + ")");
+                "(got 0x" + to_hex(auth1_orig[3]) + ")");
             return std::nullopt;
         }
 

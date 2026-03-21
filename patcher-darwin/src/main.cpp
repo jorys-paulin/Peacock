@@ -3,6 +3,7 @@
 
 #include <chrono>
 #include <cstdio>
+#include <cstring>
 #include <string>
 #include <thread>
 #include <unistd.h>
@@ -17,9 +18,9 @@ static void print_usage() {
     printf("  --headless                     Patch once and exit\n");
     printf("  --domain <url>                 Server domain (default: "
         "127.0.0.1)\n");
-    printf("  --use-http                     Use HTTP instead of HTTPS\n");
+    printf("  --dont-use-http                Use HTTPS instead of HTTP\n");
     printf(
-        "  --optional-dynamic-resources   Allow optional dynamic resources\n");
+        "  --non-optional-dynamic-resources   Allow optional dynamic resources\n");
     printf("  --help                         Show this help message\n");
 }
 
@@ -50,8 +51,8 @@ int main(int argc, char *argv[]) {
             }
         } else if (strcmp(argv[i], "--dont-use-http") == 0) {
             use_http = false;
-        } else if (strcmp(argv[i], "--optional-dynamic-resources") == 0) {
-            optional_dynres = true;
+        } else if (strcmp(argv[i], "--non-optional-dynamic-resources") == 0) {
+            optional_dynres = false;
         } else if (strcmp(argv[i], "--help") == 0) {
             print_usage();
             return 0;

@@ -75,6 +75,8 @@ namespace peacock {
 
             if (kr == KERN_SUCCESS) {
                 *old_prot = info.protection;
+                if (object_name != MACH_PORT_NULL)
+                    mach_port_deallocate(mach_task_self(), object_name);
             } else {
                 *old_prot = VM_PROT_NONE;
             }
