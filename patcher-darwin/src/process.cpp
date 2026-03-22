@@ -1,5 +1,6 @@
 #include "process.h"
 
+// ReSharper disable once CppUnusedIncludeDirective
 #include <cstring>
 #include <libproc.h>
 #include <mach-o/dyld_images.h>
@@ -9,6 +10,8 @@
 #include <sys/sysctl.h>
 
 namespace peacock {
+    static constexpr auto kBundleIdentifier = "dk.ioi.ios.hitman";
+
     static const char *kProcessNames[] = {
         "Hitman WOA", // macOS CFBundleExecutable
         nullptr,
@@ -21,7 +24,7 @@ namespace peacock {
         }
 
         // Also match if the path contains the bundle identifier
-        return strstr(path, "dk.ioi.ios.hitman") != nullptr;
+        return strstr(path, kBundleIdentifier) != nullptr;
     }
 
     /// Read the base address of the main executable from dyld image infos.

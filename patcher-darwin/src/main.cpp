@@ -3,6 +3,7 @@
 
 #include <chrono>
 #include <cstdio>
+// ReSharper disable once CppUnusedIncludeDirective
 #include <cstring>
 #include <string>
 #include <thread>
@@ -20,7 +21,8 @@ static void print_usage() {
         "127.0.0.1)\n");
     printf("  --dont-use-http                Use HTTPS instead of HTTP\n");
     printf(
-        "  --non-optional-dynamic-resources   Allow optional dynamic resources\n");
+        "  --non-optional-dynamic-resources   Don't try to make dynamic"
+        "resources optional\n");
     printf("  --help                         Show this help message\n");
 }
 
@@ -81,6 +83,7 @@ int main(int argc, char *argv[]) {
         peacock::log("Watching for HITMAN processes... (Ctrl+C to stop)");
         peacock::log("Server: " + domain);
 
+        // ReSharper disable once CppDFAEndlessLoop
         while (true) {
             patcher.patch_all_processes(options);
             std::this_thread::sleep_for(std::chrono::seconds(1));

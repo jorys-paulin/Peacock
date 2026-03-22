@@ -1,5 +1,6 @@
 #include "scanner.h"
 #include "log.h"
+// ReSharper disable once CppUnusedIncludeDirective
 #include <cstring>
 
 namespace peacock {
