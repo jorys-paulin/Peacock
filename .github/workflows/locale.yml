@@ -60,7 +60,7 @@ jobs:
           yarn rebuild-locale
 
       - name: Push updated RPKG files
-        uses: EndBug/add-and-commit@v9
+        uses: EndBug/add-and-commit@v10
         with:
           cwd: "./Peacock"
           add: |
