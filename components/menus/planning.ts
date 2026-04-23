@@ -40,7 +40,7 @@ import {
     getSubLocationFromContract,
     mapObjectives,
 } from "../contracts/dataGen"
-import { getConfig } from "../configSwizzleManager"
+import { getConfig, getVersionedConfig } from "../configSwizzleManager"
 import { getUserData, writeUserData } from "../databaseHandler"
 import { getMaxProfileLevel, nilUuid, unlockOrderComparer } from "../utils"
 
@@ -262,20 +262,11 @@ export async function getPlanningData(
         contractData.Metadata.LocationSuitOverride,
     )
 
-    const unlockedEntrances = typedInv
-        .filter((item) => item.Unlockable.Type === "access")
-        .map((i) => i.Unlockable)
-        .filter((unlockable) => unlockable.Properties.RepositoryId)
-
-    if (!unlockedEntrances) {
-        log(
-            LogLevel.ERROR,
-            "No matching entrance data found in planning, this is a bug!",
-        )
-        return {
-            error: true,
-        }
-    }
+    const allEntrances = getVersionedConfig<Unlockable[]>(
+        "allunlockables",
+        gameVersion,
+        false,
+    ).filter((u) => u.Subtype === "startinglocation")
 
     sublocation.DisplayNameLocKey = `UI_${sublocation.Id}_NAME`
 
@@ -492,7 +483,7 @@ export async function getPlanningData(
         Entrances:
             contractData.Metadata.Type === "sniper"
                 ? null
-                : unlockedEntrances
+                : allEntrances
                       .filter((unlockable) =>
                           entrancesInScene.includes(
                               unlockable.Properties.RepositoryId || "",
