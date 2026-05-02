@@ -104,9 +104,7 @@ int main(int argc, char *argv[]) {
     options.always_send_auth_header = true;
     options.set_custom_config_domain = true;
     options.enable_dynamic_resources = enable_dynres;
-    options.disable_force_offline_on_failed_dynres
-
-    = optional_dynres;
+    options.disable_force_offline_on_failed_dynres = optional_dynres;
 
     peacock::Patcher patcher;
 
